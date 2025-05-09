@@ -7,14 +7,55 @@ function normalize(text) {
         .trim();
 }
   
+// function renderTopicSelector() {
+//     const selector = document.getElementById('topicSelector');
+//     topics.forEach((topic, index) => {
+//         const btn = document.createElement('button');
+//         btn.textContent = topic.title;
+//         btn.onclick = () => renderGame(index);
+//         selector.appendChild(btn);
+//     });
+// }
+
 function renderTopicSelector() {
     const selector = document.getElementById('topicSelector');
-    topics.forEach((topic, index) => {
-        const btn = document.createElement('button');
-        btn.textContent = topic.title;
-        btn.onclick = () => renderGame(index);
-        selector.appendChild(btn);
-    });
+    selector.innerHTML = ''; // Limpia contenido previo
+
+    const groupSize = 5;
+    const totalGroups = Math.ceil(topics.length / groupSize);
+
+    for (let groupIndex = 0; groupIndex < totalGroups; groupIndex++) {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+
+        const start = groupIndex * groupSize;
+        const end = Math.min((groupIndex + 1) * groupSize, topics.length);
+        const topicNumbers = topics
+            .slice(start, end)
+            .map(topic => {
+                const match = topic.title.match(/TOPIC\s*(\d+)/i);
+                return match ? match[1] : '?';
+            })
+            .join(', ');
+
+        summary.textContent = `Temas: ${topicNumbers}`;
+        summary.style.cursor = 'pointer';
+        summary.style.fontWeight = 'bold';
+        summary.style.padding = '8px 0';
+        details.appendChild(summary);
+
+        for (let i = start; i < end; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = topics[i].title;
+            btn.onclick = () => renderGame(i);
+            btn.style.display = 'block';
+            btn.style.margin = '5px 0';
+            btn.style.width = '100%';
+            details.appendChild(btn);
+        }
+
+        selector.appendChild(details);
+    }
 }
 
 function getLevel(numbering) {

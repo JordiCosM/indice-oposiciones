@@ -146,6 +146,7 @@ button.check-btn:hover {
 }
 
 .extra-info {
+    text-align: justify;
     margin-top: 8px;
     padding: 10px;
     background-color: #eef2ff;
